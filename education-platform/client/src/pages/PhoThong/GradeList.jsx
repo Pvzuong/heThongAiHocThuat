@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { getGrades } from '../../api/subjectApi';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -9,10 +9,13 @@ const GRADE_ICONS = ['🌱', '🌿', '🌳', '⭐', '🏆', '📘', '📗', '�
 
 const GradeList = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [levels, setLevels] = useState([]);
-  const [selectedLevel, setSelectedLevel] = useState(location.state?.level || null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // selectedLevel được lấy từ location.state — đồng bộ với browser history
+  const selectedLevel = location.state?.level || null;
 
   useEffect(() => {
     getGrades()
@@ -20,6 +23,15 @@ const GradeList = () => {
       .catch(() => setError('Không thể tải danh sách lớp'))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleSelectLevel = (levelSlug) => {
+    // Push history entry mới → back button sẽ quay về đúng bước trước
+    navigate('/pho-thong', { state: { level: levelSlug } });
+  };
+
+  const handleBackToLevels = () => {
+    navigate(-1);
+  };
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="page-container"><p className="form-error">{error}</p></div>;
@@ -34,7 +46,7 @@ const GradeList = () => {
           <span className="breadcrumb-sep">›</span>
           {selectedLevel ? (
             <>
-              <button className="breadcrumb-btn" onClick={() => setSelectedLevel(null)}>Phổ thông</button>
+              <button className="breadcrumb-btn" onClick={handleBackToLevels}>Phổ thông</button>
               <span className="breadcrumb-sep">›</span>
               <span>{currentLevel?.level}</span>
             </>
@@ -47,14 +59,14 @@ const GradeList = () => {
         {!selectedLevel && (
           <>
             <h1>Chọn cấp học</h1>
-            <p>Học toán theo chương trình sách giáo khoa</p>
+            <p>Học theo chương trình sách giáo khoa</p>
           </>
         )}
 
         {/* Bước 2: Chọn lớp */}
         {selectedLevel && (
           <div className="grade-step-header">
-            <button className="btn btn--outline btn--back" onClick={() => setSelectedLevel(null)}>
+            <button className="btn btn--outline btn--back" onClick={handleBackToLevels}>
               <FiArrowLeft /> Chọn lại cấp
             </button>
             <div>
@@ -72,7 +84,7 @@ const GradeList = () => {
             <button
               key={level.slug}
               className="level-card"
-              onClick={() => setSelectedLevel(level.slug)}
+              onClick={() => handleSelectLevel(level.slug)}
             >
               <span className="level-card-icon">{LEVEL_ICONS[level.slug] || '📚'}</span>
               <h2>{level.level}</h2>
