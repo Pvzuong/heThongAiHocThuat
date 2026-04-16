@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { getGrades } from '../../api/subjectApi';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -8,8 +8,9 @@ const LEVEL_ICONS = { 'cap-1': '🏫', 'cap-2': '🏛️', 'cap-3': '🎓' };
 const GRADE_ICONS = ['🌱', '🌿', '🌳', '⭐', '🏆', '📘', '📗', '📙', '📕', '📓', '📔', '📒'];
 
 const GradeList = () => {
+  const location = useLocation();
   const [levels, setLevels] = useState([]);
-  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(location.state?.level || null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 

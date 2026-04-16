@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+
+const getLevelFromGrade = (gradeSlug) => {
+  const num = parseInt(gradeSlug.replace('lop-', ''));
+  if (num <= 5) return { slug: 'cap-1', name: 'Cấp 1' };
+  if (num <= 9) return { slug: 'cap-2', name: 'Cấp 2' };
+  return { slug: 'cap-3', name: 'Cấp 3' };
+};
 import { FiChevronDown, FiChevronRight, FiCheckCircle, FiCircle } from 'react-icons/fi';
 import { getChaptersBySubject, getLessonsByChapter } from '../../api/subjectApi';
 import { getChapterProgress } from '../../api/lessonApi';
@@ -90,6 +97,7 @@ const ChapterList = () => {
 
   const gradeName = gradeSlug.replace('lop-', 'Lớp ');
   const subjectName = subjectSlug === 'toan' ? 'Toán' : subjectSlug;
+  const level = getLevelFromGrade(gradeSlug);
 
   useEffect(() => {
     getChaptersBySubject(gradeSlug, subjectSlug)
@@ -108,6 +116,8 @@ const ChapterList = () => {
           <Link to="/">Trang chủ</Link>
           <span className="breadcrumb-sep">›</span>
           <Link to="/pho-thong">Phổ thông</Link>
+          <span className="breadcrumb-sep">›</span>
+          <Link to="/pho-thong" state={{ level: level.slug }}>{level.name}</Link>
           <span className="breadcrumb-sep">›</span>
           <Link to={`/pho-thong/${gradeSlug}`}>{gradeName}</Link>
           <span className="breadcrumb-sep">›</span>

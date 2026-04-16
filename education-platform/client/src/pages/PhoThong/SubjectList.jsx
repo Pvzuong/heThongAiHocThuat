@@ -5,6 +5,13 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 
 const SUBJECT_ICONS = { toan: '🔢', 'tieng-viet': '📖', default: '📚' };
 
+const getLevelFromGrade = (gradeSlug) => {
+  const num = parseInt(gradeSlug.replace('lop-', ''));
+  if (num <= 5) return { slug: 'cap-1', name: 'Cấp 1' };
+  if (num <= 9) return { slug: 'cap-2', name: 'Cấp 2' };
+  return { slug: 'cap-3', name: 'Cấp 3' };
+};
+
 const SubjectList = () => {
   const { gradeSlug } = useParams();
   const [subjects, setSubjects] = useState([]);
@@ -12,11 +19,12 @@ const SubjectList = () => {
   const [error, setError] = useState('');
 
   const gradeName = gradeSlug.replace('lop-', 'Lớp ');
+  const level = getLevelFromGrade(gradeSlug);
 
   useEffect(() => {
     getSubjectsByGrade(gradeSlug)
       .then((res) => setSubjects(res.data))
-      .catch(() => setError('Không thể tải danh sách môn học'))
+      .catch(() => setError('error'))
       .finally(() => setLoading(false));
   }, [gradeSlug]);
 
@@ -30,6 +38,8 @@ const SubjectList = () => {
           <span className="breadcrumb-sep">›</span>
           <Link to="/pho-thong">Phổ thông</Link>
           <span className="breadcrumb-sep">›</span>
+          <Link to="/pho-thong" state={{ level: level.slug }}>{level.name}</Link>
+          <span className="breadcrumb-sep">›</span>
           <span>{gradeName}</span>
         </div>
         <h1>{gradeName}</h1>
@@ -41,7 +51,7 @@ const SubjectList = () => {
           <span className="empty-state-icon">📚</span>
           <h3>Chưa có môn học</h3>
           <p>Nội dung cho {gradeName} đang được chuẩn bị. Vui lòng quay lại sau!</p>
-          <Link to="/pho-thong" className="btn btn--outline" style={{ marginTop: '1rem' }}>
+          <Link to="/pho-thong" state={{ level: level.slug }} className="btn btn--outline" style={{ marginTop: '1rem' }}>
             ← Chọn lớp khác
           </Link>
         </div>
