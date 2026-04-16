@@ -32,7 +32,8 @@ const search = async (req, res, next) => {
     // Tìm skill paths + skill lessons
     const pathResult = await pool.query(
       `SELECT sp.id, sp.title, sp.slug, sp.description, sp.difficulty,
-              sp.estimated_hours, sp.module_count
+              sp.estimated_hours,
+              (SELECT COUNT(*) FROM skill_modules sm WHERE sm.path_id = sp.id) AS module_count
        FROM skill_paths sp
        WHERE sp.is_active = true
          AND (sp.title ILIKE $1 OR sp.description ILIKE $1)
