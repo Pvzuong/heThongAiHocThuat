@@ -419,6 +419,14 @@ select.form-input { height: 44px; background: var(--white); }
 .grade-card h3, .subject-card h3 { font-size: 18px; font-weight: 700; }
 .grade-card p, .subject-card p { font-size: 13px; color: var(--gray-600); }
 
+.empty-state {
+  text-align: center; padding: 64px 24px;
+  color: var(--gray-600);
+}
+.empty-state-icon { font-size: 56px; display: block; margin-bottom: 16px; }
+.empty-state h3 { font-size: 20px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+.empty-state p { font-size: 15px; max-width: 400px; margin: 0 auto; }
+
 /* ============================================================
    CHAPTER LIST (accordion)
    ============================================================ */

@@ -21,7 +21,6 @@ const SubjectList = () => {
   }, [gradeSlug]);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <div className="page-container"><p className="form-error">{error}</p></div>;
 
   return (
     <div className="page-container">
@@ -37,21 +36,32 @@ const SubjectList = () => {
         <p>Chọn môn học để bắt đầu</p>
       </div>
 
-      <div className="card-grid">
-        {subjects.map((subject) => (
-          <Link
-            key={subject.id}
-            to={`/pho-thong/${gradeSlug}/${subject.slug}`}
-            className="subject-card"
-          >
-            <span className="subject-icon">
-              {SUBJECT_ICONS[subject.slug] || SUBJECT_ICONS.default}
-            </span>
-            <h3>{subject.name}</h3>
-            {subject.description && <p>{subject.description}</p>}
+      {error || subjects.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-state-icon">📚</span>
+          <h3>Chưa có môn học</h3>
+          <p>Nội dung cho {gradeName} đang được chuẩn bị. Vui lòng quay lại sau!</p>
+          <Link to="/pho-thong" className="btn btn--outline" style={{ marginTop: '1rem' }}>
+            ← Chọn lớp khác
           </Link>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="card-grid">
+          {subjects.map((subject) => (
+            <Link
+              key={subject.id}
+              to={`/pho-thong/${gradeSlug}/${subject.slug}`}
+              className="subject-card"
+            >
+              <span className="subject-icon">
+                {SUBJECT_ICONS[subject.slug] || SUBJECT_ICONS.default}
+              </span>
+              <h3>{subject.name}</h3>
+              {subject.description && <p>{subject.description}</p>}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -88,7 +88,6 @@ const GradeList = () => {
             <Link key={grade.id} to={`/pho-thong/${grade.slug}`} className="grade-card">
               <span className="grade-icon">{GRADE_ICONS[idx] || '📚'}</span>
               <h3>{grade.name}</h3>
-              <p>Chương trình Toán</p>
             </Link>
           ))}
         </div>

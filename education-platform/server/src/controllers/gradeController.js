@@ -55,10 +55,6 @@ const getSubjectsByGrade = async (req, res, next) => {
       ORDER BY s.name
     `, [gradeSlug]);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Không tìm thấy lớp hoặc môn học' });
-    }
-
     res.json(result.rows);
   } catch (err) {
     next(err);
