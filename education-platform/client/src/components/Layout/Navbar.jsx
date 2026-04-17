@@ -105,7 +105,7 @@ const Navbar = () => {
                   <div className="user-dropdown-divider" />
 
                   <Link
-                    to="/dashboard"
+                    to="/profile"
                     className="user-dropdown-item"
                     onClick={() => setDropdownOpen(false)}
                   >
@@ -171,7 +171,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="user-dropdown-divider" style={{ margin: '4px 0' }} />
-              <Link to="/dashboard" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
+              <Link to="/profile" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
                 <FiUser size={15} /> Trang cá nhân
               </Link>
               <Link to="/settings" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
