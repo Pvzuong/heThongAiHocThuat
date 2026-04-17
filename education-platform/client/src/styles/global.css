@@ -881,6 +881,7 @@ select.form-input { height: 44px; background: var(--white); }
 }
 .admin-btn:hover { background: var(--gray-100); color: var(--gray-800); }
 .admin-btn--icon { padding: 6px; }
+.admin-btn--sm { padding: 4px 10px; font-size: 12px; font-weight: 600; gap: 4px; transition: all .1s; }
 .admin-btn--danger { color: var(--red); }
 .admin-btn--danger:hover { background: #fef2f2; border-color: #fca5a5; }
 .admin-btn--success { color: var(--green); }

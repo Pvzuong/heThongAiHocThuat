@@ -403,6 +403,100 @@ const deleteSkillLesson = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
+// ============================================================
+// SUBJECTS (môn học)
+// ============================================================
+
+// GET /api/admin/subjects?gradeId=...
+const getSubjects = async (req, res, next) => {
+  try {
+    const { gradeId } = req.query;
+    let query;
+    let params;
+
+    if (gradeId) {
+      query = `
+        SELECT s.id, s.name, s.slug, s.description, s.icon_url, s.is_active,
+               gs.id AS grade_subject_id
+        FROM subjects s
+        JOIN grade_subjects gs ON gs.subject_id = s.id
+        WHERE gs.grade_id = $1
+        ORDER BY s.name
+      `;
+      params = [gradeId];
+    } else {
+      query = `SELECT id, name, slug, description, icon_url, is_active FROM subjects ORDER BY name`;
+      params = [];
+    }
+
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) { next(err); }
+};
+
+// POST /api/admin/subjects
+const createSubject = async (req, res, next) => {
+  try {
+    const { grade_id, name, slug, description, icon_url } = req.body;
+    if (!name || !slug) {
+      return res.status(400).json({ error: 'Thiếu thông tin bắt buộc: name, slug' });
+    }
+
+    // Tạo môn học
+    const subjectResult = await pool.query(
+      `INSERT INTO subjects (name, slug, description, icon_url)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name RETURNING *`,
+      [name, slug, description || null, icon_url || null]
+    );
+    const subject = subjectResult.rows[0];
+
+    // Nếu có grade_id → liên kết môn với lớp đó
+    if (grade_id) {
+      await pool.query(
+        `INSERT INTO grade_subjects (grade_id, subject_id, is_active)
+         VALUES ($1, $2, true)
+         ON CONFLICT (grade_id, subject_id) DO UPDATE SET is_active = true`,
+        [grade_id, subject.id]
+      );
+    }
+
+    res.status(201).json(subject);
+  } catch (err) { next(err); }
+};
+
+// PUT /api/admin/subjects/:id
+const updateSubject = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, slug, description, icon_url, is_active } = req.body;
+    const result = await pool.query(
+      `UPDATE subjects SET
+        name = COALESCE($1, name),
+        slug = COALESCE($2, slug),
+        description = COALESCE($3, description),
+        icon_url = COALESCE($4, icon_url),
+        is_active = COALESCE($5, is_active)
+       WHERE id = $6 RETURNING *`,
+      [name, slug, description, icon_url, is_active, id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Không tìm thấy môn học' });
+    res.json(result.rows[0]);
+  } catch (err) { next(err); }
+};
+
+// DELETE /api/admin/subjects/:id  (xoá khỏi lớp)
+const deleteSubjectFromGrade = async (req, res, next) => {
+  try {
+    const { gradeSubjectId } = req.params;
+    await pool.query(
+      `UPDATE grade_subjects SET is_active = false WHERE id = $1`,
+      [gradeSubjectId]
+    );
+    res.json({ message: 'Đã xoá môn học khỏi lớp' });
+  } catch (err) { next(err); }
+};
+
 module.exports = {
   getUsers, updateUser, deleteUser,
   createChapter, updateChapter, deleteChapter,
@@ -410,4 +504,5 @@ module.exports = {
   createExercise, updateExercise, deleteExercise,
   createSkillModule, updateSkillModule, deleteSkillModule,
   createSkillLesson, updateSkillLesson, deleteSkillLesson,
+  getSubjects, createSubject, updateSubject, deleteSubjectFromGrade,
 };

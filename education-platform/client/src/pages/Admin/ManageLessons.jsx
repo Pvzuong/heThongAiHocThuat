@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronRight, FiX } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronRight, FiX, FiBookOpen } from 'react-icons/fi';
 import { getGrades, getSubjectsByGrade, getChaptersBySubject, getLessonsByChapter } from '../../api/subjectApi';
 import { getPaths } from '../../api/pathApi';
 import {
@@ -7,6 +7,7 @@ import {
   createAdminLesson, updateAdminLesson, deleteAdminLesson,
   createAdminSkillModule, updateAdminSkillModule, deleteAdminSkillModule,
   createAdminSkillLesson, updateAdminSkillLesson, deleteAdminSkillLesson,
+  createAdminSubject, deleteAdminSubjectFromGrade,
 } from '../../api/adminApi';
 
 // ─── Generic text modal ───────────────────────────────────────
@@ -346,10 +347,13 @@ const TabPhoThong = () => {
 
   const [selLevel,   setSelLevel]   = useState('');
   const [selGrade,   setSelGrade]   = useState('');
+  const [selGradeId, setSelGradeId] = useState(null);
   const [selSubject, setSelSubject] = useState('');
   const [selGSId,    setSelGSId]    = useState(null);
   const [loading,    setLoading]    = useState(false);
   const [addChapter, setAddChapter] = useState(false);
+  const [addSubject, setAddSubject] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false); // inline confirm xoá môn
 
   // Load levels + grades
   useEffect(() => {
@@ -358,15 +362,17 @@ const TabPhoThong = () => {
 
   // Khi chọn cấp → filter grades
   useEffect(() => {
-    if (!selLevel) { setGrades([]); setSelGrade(''); return; }
+    if (!selLevel) { setGrades([]); setSelGrade(''); setSelGradeId(null); return; }
     const lvl = levels.find((l) => l.slug === selLevel);
     setGrades(lvl?.grades || []);
-    setSelGrade(''); setSubjects([]); setSelSubject(''); setChapters([]);
+    setSelGrade(''); setSelGradeId(null); setSubjects([]); setSelSubject(''); setChapters([]);
   }, [selLevel, levels]);
 
   // Khi chọn lớp → load subjects
   useEffect(() => {
-    if (!selGrade) { setSubjects([]); setSelSubject(''); return; }
+    if (!selGrade) { setSubjects([]); setSelSubject(''); setSelGradeId(null); return; }
+    const g = grades.find((g) => g.slug === selGrade);
+    setSelGradeId(g?.id ?? null);
     getSubjectsByGrade(selGrade).then((res) => {
       setSubjects(res.data);
       setSelSubject(''); setChapters([]);
@@ -375,12 +381,19 @@ const TabPhoThong = () => {
 
   // Khi chọn môn → load chapters
   useEffect(() => {
-    if (!selGrade || !selSubject) { setChapters([]); return; }
+    if (!selGrade || !selSubject) { setChapters([]); setSelGSId(null); return; }
     const sub = subjects.find((s) => s.slug === selSubject);
     setSelGSId(sub?.grade_subject_id ?? null);
     setLoading(true);
     getChaptersBySubject(selGrade, selSubject).then((res) => setChapters(res.data)).finally(() => setLoading(false));
-  }, [selSubject]);
+  }, [selSubject, subjects]); // thêm subjects vào dependency để selGSId luôn đúng
+
+  const reloadSubjects = () => {
+    if (!selGrade) return;
+    getSubjectsByGrade(selGrade).then((res) => {
+      setSubjects(res.data);
+    });
+  };
 
   const reloadChapters = () => {
     if (!selGrade || !selSubject) return;
@@ -403,12 +416,78 @@ const TabPhoThong = () => {
           {grades.map((g) => <option key={g.slug} value={g.slug}>{g.name}</option>)}
         </select>
 
-        {/* Môn */}
-        <select className="form-input admin-filter-select" value={selSubject} onChange={(e) => setSelSubject(e.target.value)} disabled={!selGrade}>
-          <option value="">-- Chọn môn --</option>
-          {subjects.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-        </select>
+        {/* Môn + inline confirm xoá */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <select
+            className="form-input admin-filter-select"
+            value={selSubject}
+            onChange={(e) => { setSelSubject(e.target.value); setConfirmDelete(false); }}
+            disabled={!selGrade}
+          >
+            <option value="">-- Chọn môn --</option>
+            {subjects.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+          </select>
 
+          {selSubject && (
+            confirmDelete ? (
+              // --- Inline confirm ---
+              <>
+                <span style={{ fontSize: 12, color: '#e53e3e', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                  Xoá môn này?
+                </span>
+                <button
+                  className="admin-btn admin-btn--sm admin-btn--danger"
+                  title="Xác nhận xoá"
+                  onClick={async () => {
+                    console.log('[DELETE subject] selGSId =', selGSId);
+                    if (!selGSId) {
+                      setConfirmDelete(false);
+                      alert('Lỗi: Không xác định được ID môn học. Vui lòng chọn lại.');
+                      return;
+                    }
+                    try {
+                      await deleteAdminSubjectFromGrade(selGSId);
+                      setConfirmDelete(false);
+                      setSelSubject('');
+                      reloadSubjects();
+                    } catch (err) {
+                      console.error('[DELETE subject] Lỗi:', err);
+                      setConfirmDelete(false);
+                      alert(`Xoá thất bại: ${err.response?.data?.error || err.message}`);
+                    }
+                  }}
+                >
+                  ✓ Xoá
+                </button>
+                <button
+                  className="admin-btn admin-btn--sm"
+                  title="Huỷ"
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  ✕ Huỷ
+                </button>
+              </>
+            ) : (
+              // --- Nút xóa thường ---
+              <button
+                className="admin-btn admin-btn--icon admin-btn--danger"
+                title="Xoá môn này khỏi lớp"
+                onClick={() => setConfirmDelete(true)}
+              >
+                <FiTrash2 size={14} />
+              </button>
+            )
+          )}
+        </div>
+
+        {/* Nút Thêm môn (khi đã chọn lớp) */}
+        {selGrade && (
+          <button className="btn btn--primary btn--sm" onClick={() => setAddSubject(true)}>
+            <FiBookOpen size={14} style={{ marginRight: 4 }} /> Thêm môn
+          </button>
+        )}
+
+        {/* Nút Thêm chương (khi đã chọn môn) */}
         {selSubject && (
           <button className="btn btn--primary btn--sm" onClick={() => setAddChapter(true)}>
             <FiPlus /> Thêm chương
@@ -441,6 +520,23 @@ const TabPhoThong = () => {
           ]}
           onClose={() => setAddChapter(false)}
           onSave={async (data) => { await createAdminChapter({ ...data, grade_subject_id: selGSId }); setAddChapter(false); reloadChapters(); }}
+        />
+      )}
+
+      {addSubject && (
+        <FieldModal
+          title={`Thêm môn học vào lớp "${grades.find(g=>g.slug===selGrade)?.name || ''}"`}
+          fields={[
+            { key: 'name', label: 'Tên môn học', required: true, defaultValue: '' },
+            { key: 'slug', label: 'Slug (không dấu, viết thường)', required: true, defaultValue: '' },
+            { key: 'description', label: 'Mô tả', full: true, defaultValue: '' },
+          ]}
+          onClose={() => setAddSubject(false)}
+          onSave={async (data) => {
+            await createAdminSubject({ ...data, grade_id: selGradeId });
+            setAddSubject(false);
+            reloadSubjects();
+          }}
         />
       )}
     </>

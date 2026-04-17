@@ -30,6 +30,12 @@ export const createAdminSkillLesson = (data) => axiosInstance.post('/admin/skill
 export const updateAdminSkillLesson = (id, data) => axiosInstance.put(`/admin/skill-lessons/${id}`, data);
 export const deleteAdminSkillLesson = (id) => axiosInstance.delete(`/admin/skill-lessons/${id}`);
 
+// Subjects (môn học)
+export const getAdminSubjects = (params) => axiosInstance.get('/admin/subjects', { params });
+export const createAdminSubject = (data) => axiosInstance.post('/admin/subjects', data);
+export const updateAdminSubject = (id, data) => axiosInstance.put(`/admin/subjects/${id}`, data);
+export const deleteAdminSubjectFromGrade = (gradeSubjectId) => axiosInstance.delete(`/admin/grade-subjects/${gradeSubjectId}`);
+
 // Gemini
 export const getGeminiSettings = () => axiosInstance.get('/admin/gemini/settings');
 export const updateGeminiSettings = (data) => axiosInstance.put('/admin/gemini/settings', data);

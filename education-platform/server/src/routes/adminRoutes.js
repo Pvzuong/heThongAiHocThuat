@@ -9,6 +9,7 @@ const {
   createExercise, updateExercise, deleteExercise,
   createSkillModule, updateSkillModule, deleteSkillModule,
   createSkillLesson, updateSkillLesson, deleteSkillLesson,
+  getSubjects, createSubject, updateSubject, deleteSubjectFromGrade,
 } = require('../controllers/adminController');
 const { getGeminiSettings, updateGeminiSettings, testGenerate } = require('../controllers/geminiController');
 
@@ -44,6 +45,13 @@ router.delete('/skill-modules/:id', deleteSkillModule);
 router.post('/skill-lessons', createSkillLesson);
 router.put('/skill-lessons/:id', updateSkillLesson);
 router.delete('/skill-lessons/:id', deleteSkillLesson);
+
+// Subjects (môn học)
+router.get('/subjects', getSubjects);
+router.post('/subjects', createSubject);
+router.put('/subjects/:id', updateSubject);
+// Xoá môn khỏi lớp — dùng /grade-subjects/:id để tránh xung đột với /subjects/:id
+router.delete('/grade-subjects/:gradeSubjectId', deleteSubjectFromGrade);
 
 // Gemini
 router.get('/gemini/settings', getGeminiSettings);
