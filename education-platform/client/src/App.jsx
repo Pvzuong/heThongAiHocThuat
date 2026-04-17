@@ -27,6 +27,7 @@ const PlacementTest     = lazy(() => import('./pages/DaiHoc/PlacementTest'));
 const SkillLessonDetail = lazy(() => import('./pages/DaiHoc/SkillLessonDetail'));
 
 const DashboardPage     = lazy(() => import('./pages/Dashboard/DashboardPage'));
+const ProfilePage       = lazy(() => import('./pages/Profile/ProfilePage'));
 const AdminLayout       = lazy(() => import('./pages/Admin/AdminLayout'));
 const SearchPage        = lazy(() => import('./pages/Search/SearchPage'));
 
@@ -67,6 +68,11 @@ const App = () => (
             {/* Dashboard */}
             <Route path="/dashboard" element={
               <ProtectedRoute><DashboardPage /></ProtectedRoute>
+            } />
+
+            {/* Profile */}
+            <Route path="/profile" element={
+              <ProtectedRoute><ProfilePage /></ProtectedRoute>
             } />
 
             {/* Admin — AdminLayout dùng Routes nội bộ với /* */}

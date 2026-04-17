@@ -306,7 +306,7 @@ const logoutHandler = async (req, res, next) => {
 const getMeHandler = async (req, res, next) => {
   try {
     const userResult = await pool.query(
-      `SELECT id, email, role, display_name, avatar_url FROM users WHERE id = $1`, [req.user.id]
+      `SELECT id, email, role, display_name, avatar_url, created_at FROM users WHERE id = $1`, [req.user.id]
     );
     if (userResult.rows.length === 0) return res.status(404).json({ error: 'Không tìm thấy người dùng' });
     res.json(userResult.rows[0]);

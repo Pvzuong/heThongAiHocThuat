@@ -143,4 +143,69 @@ const updateChapterProgress = async (userId, chapterId) => {
   `, [userId, chapterId, totalCount, completedCount, percent]);
 };
 
-module.exports = { getProgressOverview, completeLesson, getChapterProgress };
+// GET /api/progress/heatmap?year=2026
+// Trả về số hoạt động mỗi ngày trong năm (lesson completions + exercise attempts)
+const getHeatmap = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const year = parseInt(req.query.year) || new Date().getFullYear();
+
+    const result = await pool.query(`
+      SELECT date, SUM(cnt) AS count FROM (
+        SELECT DATE(completed_at) AS date, COUNT(*) AS cnt
+        FROM lesson_progress
+        WHERE user_id = $1 AND is_completed = true
+          AND EXTRACT(YEAR FROM completed_at) = $2
+        GROUP BY DATE(completed_at)
+        UNION ALL
+        SELECT DATE(attempted_at) AS date, COUNT(*) AS cnt
+        FROM exercise_attempts
+        WHERE user_id = $1
+          AND EXTRACT(YEAR FROM attempted_at) = $2
+        GROUP BY DATE(attempted_at)
+      ) sub
+      GROUP BY date
+      ORDER BY date
+    `, [userId, year]);
+
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// GET /api/progress/courses
+// Môn đang học: grade+subject có ít nhất 1 lesson completed
+const getCoursesInProgress = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const result = await pool.query(`
+      SELECT
+        g.id   AS grade_id,
+        g.name AS grade_name,
+        g.slug AS grade_slug,
+        s.id   AS subject_id,
+        s.name AS subject_name,
+        s.slug AS subject_slug,
+        COUNT(DISTINCT l.id)                                         AS total_lessons,
+        COUNT(DISTINCT lp.lesson_id) FILTER (WHERE lp.is_completed)  AS completed_lessons,
+        MAX(lp.last_accessed_at)                                     AS last_accessed
+      FROM lesson_progress lp
+      JOIN lessons l      ON l.id  = lp.lesson_id
+      JOIN chapters ch    ON ch.id = l.chapter_id
+      JOIN grade_subjects gs ON gs.id = ch.grade_subject_id
+      JOIN grades g       ON g.id  = gs.grade_id
+      JOIN subjects s     ON s.id  = gs.subject_id
+      WHERE lp.user_id = $1
+      GROUP BY g.id, g.name, g.slug, s.id, s.name, s.slug
+      ORDER BY last_accessed DESC
+    `, [userId]);
+
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getProgressOverview, completeLesson, getChapterProgress, getHeatmap, getCoursesInProgress };
