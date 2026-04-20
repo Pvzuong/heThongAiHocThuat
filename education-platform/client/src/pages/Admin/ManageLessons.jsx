@@ -349,11 +349,9 @@ const TabPhoThong = () => {
   const [selGrade,   setSelGrade]   = useState('');
   const [selGradeId, setSelGradeId] = useState(null);
   const [selSubject, setSelSubject] = useState('');
-  const [selGSId,    setSelGSId]    = useState(null);
   const [loading,    setLoading]    = useState(false);
   const [addChapter, setAddChapter] = useState(false);
   const [addSubject, setAddSubject] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false); // inline confirm xoá môn
 
   // Load levels + grades
   useEffect(() => {
@@ -381,12 +379,10 @@ const TabPhoThong = () => {
 
   // Khi chọn môn → load chapters
   useEffect(() => {
-    if (!selGrade || !selSubject) { setChapters([]); setSelGSId(null); return; }
-    const sub = subjects.find((s) => s.slug === selSubject);
-    setSelGSId(sub?.grade_subject_id ?? null);
+    if (!selGrade || !selSubject) { setChapters([]); return; }
     setLoading(true);
     getChaptersBySubject(selGrade, selSubject).then((res) => setChapters(res.data)).finally(() => setLoading(false));
-  }, [selSubject, subjects]); // thêm subjects vào dependency để selGSId luôn đúng
+  }, [selSubject, selGrade]);
 
   const reloadSubjects = () => {
     if (!selGrade) return;
@@ -416,12 +412,12 @@ const TabPhoThong = () => {
           {grades.map((g) => <option key={g.slug} value={g.slug}>{g.name}</option>)}
         </select>
 
-        {/* Môn + inline confirm xoá */}
+        {/* Môn + nút xoá */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <select
             className="form-input admin-filter-select"
             value={selSubject}
-            onChange={(e) => { setSelSubject(e.target.value); setConfirmDelete(false); }}
+            onChange={(e) => setSelSubject(e.target.value)}
             disabled={!selGrade}
           >
             <option value="">-- Chọn môn --</option>
@@ -429,54 +425,25 @@ const TabPhoThong = () => {
           </select>
 
           {selSubject && (
-            confirmDelete ? (
-              // --- Inline confirm ---
-              <>
-                <span style={{ fontSize: 12, color: '#e53e3e', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                  Xoá môn này?
-                </span>
-                <button
-                  className="admin-btn admin-btn--sm admin-btn--danger"
-                  title="Xác nhận xoá"
-                  onClick={async () => {
-                    console.log('[DELETE subject] selGSId =', selGSId);
-                    if (!selGSId) {
-                      setConfirmDelete(false);
-                      alert('Lỗi: Không xác định được ID môn học. Vui lòng chọn lại.');
-                      return;
-                    }
-                    try {
-                      await deleteAdminSubjectFromGrade(selGSId);
-                      setConfirmDelete(false);
-                      setSelSubject('');
-                      reloadSubjects();
-                    } catch (err) {
-                      console.error('[DELETE subject] Lỗi:', err);
-                      setConfirmDelete(false);
-                      alert(`Xoá thất bại: ${err.response?.data?.error || err.message}`);
-                    }
-                  }}
-                >
-                  ✓ Xoá
-                </button>
-                <button
-                  className="admin-btn admin-btn--sm"
-                  title="Huỷ"
-                  onClick={() => setConfirmDelete(false)}
-                >
-                  ✕ Huỷ
-                </button>
-              </>
-            ) : (
-              // --- Nút xóa thường ---
-              <button
-                className="admin-btn admin-btn--icon admin-btn--danger"
-                title="Xoá môn này khỏi lớp"
-                onClick={() => setConfirmDelete(true)}
-              >
-                <FiTrash2 size={14} />
-              </button>
-            )
+            <button
+              className="admin-btn admin-btn--icon admin-btn--danger"
+              title="Xoá môn này khỏi lớp"
+              onClick={async () => {
+                const sub = subjects.find((s) => s.slug === selSubject);
+                const gsId = sub?.grade_subject_id;
+                if (!gsId) { alert('Không xác định được ID môn học. Vui lòng chọn lại.'); return; }
+                if (!window.confirm(`Xoá môn "${sub.name}" khỏi lớp này?`)) return;
+                try {
+                  await deleteAdminSubjectFromGrade(gsId);
+                  setSelSubject('');
+                  reloadSubjects();
+                } catch (err) {
+                  alert(`Xoá thất bại: ${err.response?.data?.error || err.message}`);
+                }
+              }}
+            >
+              <FiTrash2 size={14} />
+            </button>
           )}
         </div>
 

@@ -30,6 +30,9 @@ const DashboardPage     = lazy(() => import('./pages/Dashboard/DashboardPage'));
 const ProfilePage       = lazy(() => import('./pages/Profile/ProfilePage'));
 const AdminLayout       = lazy(() => import('./pages/Admin/AdminLayout'));
 const SearchPage        = lazy(() => import('./pages/Search/SearchPage'));
+const PracticeSetup     = lazy(() => import('./pages/Practice/PracticeSetup'));
+const PracticeArena     = lazy(() => import('./pages/Practice/PracticeArena'));
+const PracticeLeaderboard = lazy(() => import('./pages/Practice/PracticeLeaderboard'));
 
 const App = () => (
   <BrowserRouter>
@@ -64,6 +67,15 @@ const App = () => (
 
             {/* Search */}
             <Route path="/search" element={<SearchPage />} />
+
+            {/* Luyện tập Nhanh */}
+            <Route path="/practice" element={
+              <ProtectedRoute><PracticeSetup /></ProtectedRoute>
+            } />
+            <Route path="/practice/arena" element={
+              <ProtectedRoute><PracticeArena /></ProtectedRoute>
+            } />
+            <Route path="/practice/leaderboard" element={<PracticeLeaderboard />} />
 
             {/* Dashboard */}
             <Route path="/dashboard" element={

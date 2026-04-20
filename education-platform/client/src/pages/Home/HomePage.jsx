@@ -47,7 +47,7 @@ const HomePage = () => {
             <FiCode size={40} />
           </div>
           <h2>Kỹ năng nghề nghiệp</h2>
-          <p>Lộ trình học Frontend & Backend Developer — từ cơ bản đến sẵn sàng đi làm.</p>
+          <p>Lộ trình học Frontend &amp; Backend Developer — từ cơ bản đến sẵn sàng đi làm.</p>
           <ul className="entry-features">
             <li>Lộ trình có cấu trúc rõ ràng</li>
             <li>Bài test đánh giá trình độ đầu vào</li>
@@ -56,6 +56,42 @@ const HomePage = () => {
           <Link to="/skill-paths" className="btn btn--purple">
             Xem lộ trình <FiArrowRight />
           </Link>
+        </div>
+      </section>
+
+      {/* ⚡ Luyện tập Nhanh Banner */}
+      <section className="home-practice-banner">
+        <div className="home-practice-inner">
+          <div className="home-practice-left">
+            <div className="home-practice-icon-wrap">⚡</div>
+            <div>
+              <h2 className="home-practice-title">Luyện tập Nhanh</h2>
+              <p className="home-practice-desc">
+                Thử thách bản thân với câu hỏi có giới hạn thời gian — chọn môn, chọn độ khó
+                và đua tốc độ tư duy. Kết quả được lưu lại để so sánh xếp hạng!
+              </p>
+              <ul className="home-practice-features">
+                <li>⏱ Timer theo từng câu (5–10 giây)</li>
+                <li>❤️ Giới hạn số lần sai theo độ khó</li>
+                <li>🔥 Điểm thưởng khi trả lời chuỗi đúng liên tiếp</li>
+                <li>🏆 Lưu điểm &amp; xếp hạng với người khác</li>
+              </ul>
+            </div>
+          </div>
+          <div className="home-practice-right">
+            {user ? (
+              <Link to="/practice" className="btn home-practice-btn" id="home-practice-cta">
+                ⚡ Bắt đầu luyện tập
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="btn home-practice-btn" id="home-practice-login">
+                  Đăng nhập để luyện tập
+                </Link>
+                <p className="home-practice-note">Cần tài khoản để lưu kết quả &amp; xếp hạng</p>
+              </>
+            )}
+          </div>
         </div>
       </section>
 

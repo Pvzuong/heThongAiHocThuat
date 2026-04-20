@@ -14,6 +14,7 @@ const progressRoutes = require('./routes/progressRoutes');
 const pathRoutes = require('./routes/pathRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const practiceRoutes = require('./routes/practiceRoutes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/paths', pathRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/practice', practiceRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
