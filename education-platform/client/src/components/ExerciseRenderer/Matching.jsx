@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Matching = ({ question, onSubmit, disabled }) => {
   const { left, right } = question.options;
   const [selected, setSelected] = useState(null); // index bên trái đang chọn
   const [pairs, setPairs] = useState([]); // [[leftIdx, rightIdx], ...]
+
+  useEffect(() => {
+    setSelected(null);
+    setPairs([]);
+  }, [question.id]);
 
   const isLeftPaired = (idx) => pairs.some(([l]) => l === idx);
   const isRightPaired = (idx) => pairs.some(([, r]) => r === idx);

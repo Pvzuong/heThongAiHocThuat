@@ -33,6 +33,10 @@ const SearchPage        = lazy(() => import('./pages/Search/SearchPage'));
 const PracticeSetup     = lazy(() => import('./pages/Practice/PracticeSetup'));
 const PracticeArena     = lazy(() => import('./pages/Practice/PracticeArena'));
 const PracticeLeaderboard = lazy(() => import('./pages/Practice/PracticeLeaderboard'));
+const AIQuestionGenerator = lazy(() => import('./pages/Practice/AIQuestionGenerator'));
+const AIPracticeArena   = lazy(() => import('./pages/Practice/AIPracticeArena'));
+const AIResultPage      = lazy(() => import('./pages/Practice/AIResultPage'));
+const AICollectionHistory = lazy(() => import('./pages/Practice/AICollectionHistory'));
 
 const App = () => (
   <BrowserRouter>
@@ -76,6 +80,18 @@ const App = () => (
               <ProtectedRoute><PracticeArena /></ProtectedRoute>
             } />
             <Route path="/practice/leaderboard" element={<PracticeLeaderboard />} />
+            <Route path="/practice/ai-generator" element={
+              <ProtectedRoute><AIQuestionGenerator /></ProtectedRoute>
+            } />
+            <Route path="/practice/ai-arena/:collectionId" element={
+              <ProtectedRoute><AIPracticeArena /></ProtectedRoute>
+            } />
+            <Route path="/practice/ai-result/:collectionId" element={
+              <ProtectedRoute><AIResultPage /></ProtectedRoute>
+            } />
+            <Route path="/practice/ai-history" element={
+              <ProtectedRoute><AICollectionHistory /></ProtectedRoute>
+            } />
 
             {/* Dashboard */}
             <Route path="/dashboard" element={

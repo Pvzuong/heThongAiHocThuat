@@ -15,6 +15,7 @@ const pathRoutes = require('./routes/pathRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 const practiceRoutes = require('./routes/practiceRoutes');
+const geminiRoutes = require('./routes/geminiRoutes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/paths', pathRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/practice', practiceRoutes);
+app.use('/api/gemini', geminiRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

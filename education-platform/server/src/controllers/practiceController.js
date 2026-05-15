@@ -179,4 +179,84 @@ const getMySessions = async (req, res, next) => {
   }
 };
 
-module.exports = { getPracticeQuestions, savePracticeSession, getLeaderboard, getMySessions };
+// ============================================================
+// GET /api/practice/skill-paths  — danh sách skill paths + modules
+// ============================================================
+const getSkillPathsForPractice = async (req, res, next) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        sp.id, sp.title, sp.slug, sp.description, sp.difficulty, sp.sort_order,
+        COALESCE(
+          json_agg(
+            json_build_object('id', sm.id, 'title', sm.title, 'sort_order', sm.sort_order)
+            ORDER BY sm.sort_order
+          ) FILTER (WHERE sm.id IS NOT NULL),
+          '[]'
+        ) AS modules
+      FROM skill_paths sp
+      LEFT JOIN skill_modules sm ON sm.path_id = sp.id AND sm.is_active = true
+      WHERE sp.is_active = true
+      GROUP BY sp.id
+      ORDER BY sp.sort_order
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================================
+// GET /api/practice/skill-questions
+// Query: pathSlug, moduleId?, limit?
+// Lấy câu hỏi từ placement_questions theo skill path/module
+// ============================================================
+const getSkillQuestions = async (req, res, next) => {
+  try {
+    const { pathSlug, moduleId, limit = 40 } = req.query;
+
+    if (!pathSlug) {
+      return res.status(400).json({ error: 'Thiếu pathSlug' });
+    }
+
+    const params = [pathSlug];
+    let moduleFilter = '';
+
+    if (moduleId) {
+      params.push(parseInt(moduleId));
+      moduleFilter = `AND pq.module_id = $${params.length}`;
+    }
+
+    params.push(parseInt(limit) || 40);
+
+    const result = await pool.query(
+      `SELECT
+        pq.id,
+        'multiple_choice' AS exercise_type,
+        pq.question_text,
+        NULL AS question_image_url,
+        pq.options,
+        pq.correct_answer,
+        NULL AS explanation,
+        1 AS difficulty,
+        sm.title AS chapter_title,
+        sm.title AS lesson_title
+      FROM placement_questions pq
+      JOIN placement_tests pt ON pt.id = pq.test_id
+      JOIN skill_paths sp ON sp.id = pt.path_id
+      LEFT JOIN skill_modules sm ON sm.id = pq.module_id
+      WHERE sp.slug = $1
+        AND pt.is_active = true
+        ${moduleFilter}
+      ORDER BY RANDOM()
+      LIMIT $${params.length}`,
+      params
+    );
+
+    res.json({ questions: result.rows, total: result.rows.length });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getPracticeQuestions, savePracticeSession, getLeaderboard, getMySessions, getSkillPathsForPractice, getSkillQuestions };

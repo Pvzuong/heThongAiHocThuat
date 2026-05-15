@@ -1,198 +1,182 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { FiBook, FiLogOut, FiSearch, FiMenu, FiX, FiUser, FiSettings } from 'react-icons/fi';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  FiLogOut, FiSearch, FiMenu,
+  FiUser, FiSettings, FiBookOpen, FiCode, FiCpu, FiBarChart2, FiGrid,
+} from 'react-icons/fi';
 import useAuth from '../../hooks/useAuth';
 import { useState, useEffect, useRef } from 'react';
 
-const getInitial = (user) => {
-  if (user.display_name) return user.display_name.charAt(0).toUpperCase();
-  return user.email.charAt(0).toUpperCase();
-};
+const getInitial = (u) => (u.display_name ? u.display_name[0] : u.email[0]).toUpperCase();
+const getDisplayName = (u) => u.display_name || u.email.split('@')[0];
 
-const getDisplayName = (user) => {
-  return user.display_name || user.email.split('@')[0];
-};
+const NAV_LINKS = [
+  { to: '/dashboard',              label: 'Dashboard',    icon: <FiGrid      size={19} /> },
+  { to: '/pho-thong',             label: 'Phổ thông',    icon: <FiBookOpen  size={19} /> },
+  { to: '/skill-paths',           label: 'Kỹ năng',      icon: <FiCode      size={19} /> },
+  { to: '/practice/ai-generator', label: 'AI Luyện tập', icon: <FiCpu       size={19} /> },
+  { to: '/profile',               label: 'Tiến độ',      icon: <FiBarChart2 size={19} /> },
+];
 
-const Navbar = () => {
-  const { user, logout } = useAuth();
+/* ── SIDEBAR ─────────────────────────────────────── */
+export const Sidebar = ({ mobileOpen, onClose }) => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const isActive = (path) => location.pathname === path || (path !== '/dashboard' && location.pathname.startsWith(path));
 
-  const mobileRef = useRef(null);
-  const dropdownRef = useRef(null);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (search.trim()) {
-      navigate(`/search?q=${encodeURIComponent(search.trim())}`);
-      setMobileOpen(false);
-    }
-  };
+  useEffect(() => { onClose?.(); }, [location.pathname]);
 
   const handleLogout = async () => {
-    setDropdownOpen(false);
-    setMobileOpen(false);
+    onClose?.();
     await logout();
     navigate('/');
   };
 
-  // Đóng dropdown khi click ra ngoài
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
-      if (mobileRef.current && !mobileRef.current.contains(e.target)) {
-        setMobileOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
   return (
-    <nav className="navbar">
-      <div className="navbar-inner">
+    <>
+      {mobileOpen && <div className="sidebar-overlay" onClick={onClose} />}
+
+      <aside className={`sidebar${mobileOpen ? ' sidebar--open' : ''}`}>
         {/* Logo */}
-        <Link to="/" className="navbar-logo" onClick={() => { setMobileOpen(false); setDropdownOpen(false); }}>
-          <FiBook size={24} />
-          <span>LearnHub</span>
+        <Link to="/" className="sidebar-logo" onClick={onClose}>
+          <div className="sidebar-logo-avatar">LH</div>
+          <div>
+            <div className="sidebar-logo-text">LearnHub</div>
+            <div className="sidebar-logo-tagline">Vibrant Learning</div>
+          </div>
         </Link>
 
-        {/* Search — desktop */}
-        <form className="navbar-search navbar-search--desktop" onSubmit={handleSearch}>
-          <FiSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Tìm kiếm bài học, lộ trình..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
-
-        {/* Nav links — desktop */}
-        <div className="navbar-links navbar-links--desktop">
-          <Link to="/pho-thong" className="nav-link">Phổ thông</Link>
-          <Link to="/skill-paths" className="nav-link">Kỹ năng</Link>
-
-          {user ? (
-            <div className="navbar-user-wrap" ref={dropdownRef}>
-              {user.role === 'admin' && (
-                <Link to="/admin" className="nav-link nav-link--admin">Admin</Link>
-              )}
-              {/* Avatar button */}
-              <button
-                className="navbar-avatar"
-                onClick={() => setDropdownOpen((v) => !v)}
-                aria-label="Tài khoản"
-              >
-                {getInitial(user)}
-              </button>
-
-              {/* Dropdown */}
-              {dropdownOpen && (
-                <div className="user-dropdown">
-                  {/* Header: avatar + name + email */}
-                  <div className="user-dropdown-header">
-                    <div className="user-dropdown-avatar">{getInitial(user)}</div>
-                    <div className="user-dropdown-info">
-                      <span className="user-dropdown-name">{getDisplayName(user)}</span>
-                      <span className="user-dropdown-email">{user.email}</span>
-                    </div>
-                  </div>
-
-                  <div className="user-dropdown-divider" />
-
-                  <Link
-                    to="/profile"
-                    className="user-dropdown-item"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <FiUser size={15} />
-                    Trang cá nhân
-                  </Link>
-                  <Link
-                    to="/settings"
-                    className="user-dropdown-item"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <FiSettings size={15} />
-                    Cài đặt
-                  </Link>
-
-                  <div className="user-dropdown-divider" />
-
-                  <button className="user-dropdown-item user-dropdown-item--danger" onClick={handleLogout}>
-                    <FiLogOut size={15} />
-                    Đăng xuất
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link to="/login" className="btn btn--primary">Đăng nhập</Link>
-          )}
-        </div>
-
-        {/* Hamburger — mobile */}
-        <button
-          className="navbar-hamburger"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Menu"
-          ref={mobileRef}
-        >
-          {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="navbar-mobile-menu">
-          <form className="navbar-search" onSubmit={handleSearch}>
-            <FiSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Tìm kiếm..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </form>
-          <Link to="/pho-thong" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Phổ thông</Link>
-          <Link to="/skill-paths" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Kỹ năng</Link>
-          {user ? (
-            <>
-              {/* User info mobile */}
-              <div className="mobile-user-info">
-                <div className="navbar-avatar navbar-avatar--sm">{getInitial(user)}</div>
-                <div>
-                  <div className="mobile-user-name">{getDisplayName(user)}</div>
-                  <div className="mobile-user-email">{user.email}</div>
-                </div>
-              </div>
-              <div className="user-dropdown-divider" style={{ margin: '4px 0' }} />
-              <Link to="/profile" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
-                <FiUser size={15} /> Trang cá nhân
-              </Link>
-              <Link to="/settings" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>
-                <FiSettings size={15} /> Cài đặt
-              </Link>
-              {user.role === 'admin' && (
-                <Link to="/admin" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Admin</Link>
-              )}
-              <button className="mobile-nav-link mobile-nav-link--logout" onClick={handleLogout}>
-                <FiLogOut size={16} /> Đăng xuất
-              </button>
-            </>
-          ) : (
-            <Link to="/login" className="btn btn--primary" style={{ margin: '8px 0' }} onClick={() => setMobileOpen(false)}>
-              Đăng nhập
+        {/* Nav items */}
+        <nav className="sidebar-nav">
+          {NAV_LINKS.map(({ to, label, icon }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`sidebar-nav-item${isActive(to) ? ' sidebar-nav-item--active' : ''}`}
+              onClick={onClose}
+            >
+              <span className="sidebar-nav-icon">{icon}</span>
+              <span className="sidebar-nav-label">{label}</span>
             </Link>
-          )}
-        </div>
-      )}
-    </nav>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        {user && (
+          <div className="sidebar-footer">
+            <button className="sidebar-footer-item" onClick={handleLogout}>
+              <FiLogOut size={18} />
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        )}
+      </aside>
+    </>
   );
 };
 
-export default Navbar;
+/* ── TOPBAR ──────────────────────────────────────── */
+export const Topbar = ({ onMenuClick }) => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) navigate(`/search?q=${encodeURIComponent(search.trim())}`);
+  };
+
+  const handleLogout = async () => {
+    setDropdownOpen(false);
+    await logout();
+    navigate('/');
+  };
+
+  useEffect(() => {
+    const h = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setDropdownOpen(false);
+    };
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
+  }, []);
+
+  return (
+    <header className="topbar">
+      {/* Hamburger — mobile only */}
+      <button className="topbar-hamburger" onClick={onMenuClick} aria-label="Menu">
+        <FiMenu size={22} />
+      </button>
+
+      {/* Logo mobile */}
+      <Link to="/" className="topbar-logo-mobile">
+        <span className="sidebar-logo-avatar" style={{ width: 28, height: 28, fontSize: 11 }}>LH</span>
+        <span className="sidebar-logo-text">LearnHub</span>
+      </Link>
+
+      {/* Search */}
+      <form className="topbar-search" onSubmit={handleSearch}>
+        <FiSearch className="topbar-search-icon" />
+        <input
+          type="text"
+          placeholder="Tìm kiếm bài học, lộ trình..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </form>
+
+      {/* Auth */}
+      <div className="topbar-auth">
+        {user ? (
+          <div className="topbar-user" ref={dropdownRef}>
+            <button
+              className="topbar-avatar"
+              onClick={() => setDropdownOpen((v) => !v)}
+              aria-label="Tài khoản"
+            >
+              {getInitial(user)}
+            </button>
+
+            {dropdownOpen && (
+              <div className="user-dropdown topbar-dropdown">
+                <div className="user-dropdown-header">
+                  <div className="user-dropdown-avatar">{getInitial(user)}</div>
+                  <div className="user-dropdown-info">
+                    <span className="user-dropdown-name">{getDisplayName(user)}</span>
+                    <span className="user-dropdown-email">{user.email}</span>
+                  </div>
+                </div>
+                <div className="user-dropdown-divider" />
+                {user.role === 'admin' && (
+                  <Link to="/admin" className="user-dropdown-item" onClick={() => setDropdownOpen(false)}>
+                    <FiSettings size={15} /> Admin
+                  </Link>
+                )}
+                <Link to="/profile" className="user-dropdown-item" onClick={() => setDropdownOpen(false)}>
+                  <FiUser size={15} /> Trang cá nhân
+                </Link>
+                <Link to="/settings" className="user-dropdown-item" onClick={() => setDropdownOpen(false)}>
+                  <FiSettings size={15} /> Cài đặt
+                </Link>
+                <div className="user-dropdown-divider" />
+                <button className="user-dropdown-item user-dropdown-item--danger" onClick={handleLogout}>
+                  <FiLogOut size={15} /> Đăng xuất
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="topbar-auth-btns">
+            <Link to="/register" className="btn btn--outline btn--sm">Đăng ký</Link>
+            <Link to="/login"    className="btn btn--primary btn--sm">Đăng nhập</Link>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+};
+
+/* default export vẫn giữ để không break import cũ */
+export default Sidebar;

@@ -7,7 +7,7 @@ const getLevelFromGrade = (gradeSlug) => {
   if (num <= 9) return { slug: 'cap-2', name: 'Cấp 2' };
   return { slug: 'cap-3', name: 'Cấp 3' };
 };
-import { FiChevronDown, FiChevronRight, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import { FiChevronDown, FiChevronRight, FiCheckCircle, FiCircle, FiLock } from 'react-icons/fi';
 import { getChaptersBySubject, getLessonsByChapter } from '../../api/subjectApi';
 import { getChapterProgress } from '../../api/lessonApi';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -40,6 +40,13 @@ const ChapterItem = ({ chapter, gradeSlug, subjectSlug }) => {
   const isCompleted = (lessonId) =>
     progress.find((p) => p.lesson_id === lessonId)?.is_completed;
 
+  // Bài i bị khóa nếu user đã đăng nhập VÀ bài trước đó chưa hoàn thành
+  const isLocked = (idx) => {
+    if (!user) return false;
+    if (idx === 0) return false;
+    return !isCompleted(lessons[idx - 1].id);
+  };
+
   const completedCount = progress.filter((p) => p.is_completed).length;
   const total = parseInt(chapter.lesson_count) || 0;
   const percent = total > 0 ? Math.round((completedCount / total) * 100) : 0;
@@ -71,17 +78,34 @@ const ChapterItem = ({ chapter, gradeSlug, subjectSlug }) => {
           {loadingLessons ? (
             <LoadingSpinner fullPage={false} />
           ) : (
-            lessons.map((lesson) => (
-              <Link key={lesson.id} to={`/lesson/${lesson.id}`} className="lesson-row">
-                <span className={`lesson-status ${isCompleted(lesson.id) ? 'lesson-status--done' : ''}`}>
-                  {isCompleted(lesson.id) ? <FiCheckCircle /> : <FiCircle />}
-                </span>
-                <span className="lesson-row-title">{lesson.title}</span>
-                <span className={`badge badge--${lesson.content_type === 'theory' ? 'blue' : 'green'}`}>
-                  {lesson.content_type === 'theory' ? 'Lý thuyết' : 'Thực hành'}
-                </span>
-              </Link>
-            ))
+            lessons.map((lesson, idx) => {
+              const locked = isLocked(idx);
+              const done = isCompleted(lesson.id);
+
+              if (locked) {
+                return (
+                  <div key={lesson.id} className="lesson-row lesson-row--locked">
+                    <span className="lesson-status lesson-status--locked">
+                      <FiLock size={15} />
+                    </span>
+                    <span className="lesson-row-title">{lesson.title}</span>
+                    <span className="badge badge--gray">Chưa mở khóa</span>
+                  </div>
+                );
+              }
+
+              return (
+                <Link key={lesson.id} to={`/lesson/${lesson.id}`} className="lesson-row">
+                  <span className={`lesson-status ${done ? 'lesson-status--done' : ''}`}>
+                    {done ? <FiCheckCircle /> : <FiCircle />}
+                  </span>
+                  <span className="lesson-row-title">{lesson.title}</span>
+                  <span className={`badge badge--${lesson.content_type === 'theory' ? 'blue' : 'green'}`}>
+                    {lesson.content_type === 'theory' ? 'Lý thuyết' : 'Thực hành'}
+                  </span>
+                </Link>
+              );
+            })
           )}
         </div>
       )}

@@ -125,13 +125,13 @@ const ExercisePage = () => {
 
         {/* Renderer */}
         {exercise.exercise_type === 'multiple_choice' && (
-          <MultipleChoice question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
+          <MultipleChoice key={exercise.id} question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
         )}
         {exercise.exercise_type === 'fill_blank' && (
-          <FillInBlank question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
+          <FillInBlank key={exercise.id} question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
         )}
         {exercise.exercise_type === 'matching' && (
-          <Matching question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
+          <Matching key={exercise.id} question={exercise} onSubmit={handleSubmit} disabled={!!result || submitting} />
         )}
 
         {/* Kết quả */}
