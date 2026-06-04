@@ -1,0 +1,2223 @@
+{
+	"_type": "Project",
+	"_id": "cYTMNboWMeiJX3dA",
+	"name": "LearnHub ERD",
+	"ownedElements": [
+		{
+			"_type": "ERDDataModel",
+			"_id": "Htdj71QREtbY2wIW",
+			"name": "LearnHub Database",
+			"ownedElements": [
+				{
+					"_type": "ERDEntity",
+					"_id": "5BcwVv/ssR05ggBU",
+					"name": "users",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "BBlSdGdk40OhLqnU",
+							"name": "id",
+							"type": "UUID",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "J6hvGGf0xzD8b2Vx",
+							"name": "email",
+							"type": "VARCHAR(255)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "pWYb8JsHwsUTl/oh",
+							"name": "password_hash",
+							"type": "VARCHAR(255)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "R5fZRwcIp6JpDa7O",
+							"name": "display_name",
+							"type": "VARCHAR(100)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "WS6q54Uv5lvXkiNm",
+							"name": "avatar_url",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "0srD+dyPfkeDcXtR",
+							"name": "role",
+							"type": "ENUM"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "V2OyQogV+rqwLpML",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ApDO4pf8fFSw0VTI",
+							"name": "is_verified",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Shuwe80qzsFAPf/A",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "PrqDBNtey4C4wIQ5",
+							"name": "updated_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "c9kPQ5TRvJ23b7FJ",
+					"name": "otp_codes",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "Z/0NaSlzAudJVJxk",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "s0zAG/nDyMknFG3m",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "hi370yKBhRRo/fbQ",
+							"name": "email",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "+dd4EPEsf/kIife7",
+							"name": "otp_code",
+							"type": "VARCHAR(6)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "4Syd3WT1rz30b2A6",
+							"name": "expires_at",
+							"type": "TIMESTAMP"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "WufLV6VpYT6EiGgA",
+							"name": "is_used",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ijNJkkHHptxg4oDN",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "5ISdj9T6eoDppxyb",
+					"name": "refresh_tokens",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "cC9KSBLBuS9F0Tk5",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "gJDDCFPjvoFLMDCc",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "jX/d8AGYK+PU8NiB",
+							"name": "token",
+							"type": "TEXT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Uk9qhKBa+NYPRi0m",
+							"name": "expires_at",
+							"type": "TIMESTAMP"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "h1HLP5PXqaNKvMNR",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "UUy/FYyG/12tltbs",
+					"name": "otp_rate_limits",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "ciOYEQmTS68Bmcr5",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "S/YDw40epmKjncbI",
+							"name": "email",
+							"type": "VARCHAR(255)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "VXXH1aDbfHSu/lrE",
+							"name": "request_count",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "I7pBeZzCp6edMoZ6",
+							"name": "window_start",
+							"type": "TIMESTAMP",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "DIp0evffSmYYzPhL",
+							"name": "last_request_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "PyVlt0XOQxJtIQfq",
+					"name": "education_levels",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "uXVrqygH1hktVwUY",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ngpV/GCUI3VHxhcg",
+							"name": "name",
+							"type": "VARCHAR(50)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "6qz//mnO76A0iMjk",
+							"name": "slug",
+							"type": "VARCHAR(50)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "DMdWWdQenNC8opxN",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "r3LfOUfqVvLjflsm",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "mfj3V7IwSZ4G5j76",
+					"name": "grades",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "CNDFD3e7SRlEBx9w",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "jwa5Gzmzn5iAV9ns",
+							"name": "education_level_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "B0RvdFico+3fuYR2",
+							"name": "grade_number",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "D+jnB9vZkoODu7eL",
+							"name": "name",
+							"type": "VARCHAR(50)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "dX5mBJQH29AuTf/O",
+							"name": "slug",
+							"type": "VARCHAR(50)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "518JtobhrgO9HMoH",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "oYY8zKXZBbh7dNeo",
+					"name": "subjects",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "ltAD28zHazlHvOEi",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "8DJVyEp7eVObpnNY",
+							"name": "name",
+							"type": "VARCHAR(100)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "PtKkZe+/B+2cdnAA",
+							"name": "slug",
+							"type": "VARCHAR(100)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2O/T9T2iuM7CucoG",
+							"name": "icon_url",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ujYNhLapRolgGxlL",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "0b582JvyZ/07+rI3",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "ZR/p+bhM8e9eqwC3",
+					"name": "grade_subjects",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "oT+mIiuqxtpw5DhE",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "+FZnjklr9Vl1ztdA",
+							"name": "grade_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "WuLp1MOeTYuG+U5t",
+							"name": "subject_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "yQtyHPKpLai63ZRf",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "MXbgm/VtD73sy4al",
+					"name": "chapters",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "Hcs5okBGvTWBr7x2",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "agokTWQpk3Ri0dFp",
+							"name": "grade_subject_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "pLAbYoQnJcMS5rJZ",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "nLdnGfHBfdiO68v9",
+							"name": "slug",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "9LQtngUbzC32J8a4",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2KHau9PL4Nd2++rY",
+							"name": "sort_order",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "OTO+wgXASRSHJrNy",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "DCTVpEDBHEuprXba",
+					"name": "lessons",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "iA6rQvV9IgeG3Y+U",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "fHHdwicwAmt4gZNb",
+							"name": "chapter_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "6E0isdDSjdPDSa5U",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "13d844PexFYGF/GH",
+							"name": "slug",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "J1gSdqukmbmAitEW",
+							"name": "content_type",
+							"type": "VARCHAR(20)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "7By5k3ILbYuWoBhJ",
+							"name": "content_html",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "/1NaTih0XwSUoVaR",
+							"name": "sort_order",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "OsXn3HIW+zZm5XFm",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "gz5h0cGuDYidndiQ",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "15c78UkTkDgTPxjL",
+					"name": "exercises",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "0JoKBThmYy0ewS+a",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "r2BEFGTh9O81vfwE",
+							"name": "lesson_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "BdERSFZ88EQQrgLg",
+							"name": "exercise_type",
+							"type": "ENUM"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "tZ0wQzV3TsBMjmKg",
+							"name": "question_text",
+							"type": "TEXT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "UJyXYQ95INZnYeak",
+							"name": "options",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2gxBgbQHXvaZdSbv",
+							"name": "correct_answer",
+							"type": "JSONB"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ueGZqcLYPz1odE5j",
+							"name": "explanation",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "17zm+GaJyyluJ6v5",
+							"name": "difficulty",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ytaTB4uI28q6Vl96",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "8oY4l5fEeD/6JrwR",
+					"name": "lesson_progress",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "u6bwOyQXAzSa45tJ",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ZXReHZblkNxXYij+",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "VdiThY3m6fs0YK8+",
+							"name": "lesson_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "4w/DvJWE/XrwnfC/",
+							"name": "is_completed",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "bdbM4LhHEkZ2bGNC",
+							"name": "completed_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "dkTTTFRL7Xv+Aw3u",
+							"name": "last_accessed_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "pcI1rpS8Cs7MWi7j",
+					"name": "exercise_attempts",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "Z9O/tthFUgwRZlNj",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "jskQf3cRwZCl3OqF",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "LAP4bYkzhOTZ3Tcz",
+							"name": "exercise_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "u1Hb3RumdzJhkgO0",
+							"name": "user_answer",
+							"type": "JSONB"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "vS8/YY3Cg+ziQ2di",
+							"name": "is_correct",
+							"type": "BOOLEAN"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "nBoTlhPp2qrvK0tb",
+							"name": "attempted_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "CURd/+hTgRPafNua",
+					"name": "chapter_progress",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "Mp34ORXAtjjA2RMZ",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "XrNmrQyWoaMHdjJc",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "cgClv3RGNE565Fra",
+							"name": "chapter_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "U0wxxgjKhiD/w8NS",
+							"name": "total_lessons",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ZzrzpKe/DlV0BJHg",
+							"name": "completed_lessons",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "S0rhL7o8IemOuFRd",
+							"name": "progress_percent",
+							"type": "DECIMAL(5,2)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "zR23g+3F05koNkTh",
+							"name": "updated_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "taZCoqX1vPe0sbmf",
+					"name": "skill_paths",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "CVY20IBOy6k7rUa4",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "nrLg9zM2EKjuXPsA",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "sdQ+36b01RZ8kTEQ",
+							"name": "slug",
+							"type": "VARCHAR(255)",
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "xyEsxl7z02/i8BiS",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "tpP7I1nFsH9cx8Z6",
+							"name": "icon_url",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "TT2SIm6QIgRWotvz",
+							"name": "estimated_hours",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "NVRwYnVNz3AW8QhW",
+							"name": "difficulty",
+							"type": "VARCHAR(20)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "NY/wMlDY02UeaTvj",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "JpcINU5Myh7iMjvC",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "PHcN0VI9bgAuNce1",
+					"name": "skill_modules",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "AgpcIZ11JA1sNCa+",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "U+2xbBKLE6Ony+xQ",
+							"name": "path_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Da5BW+O/ugpg6xTz",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2WY/+ETJmdhBdxYs",
+							"name": "slug",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "kBbeSZhciY/nxGQe",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "qg5rwyLB2o3zTLVF",
+							"name": "sort_order",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "tRH0MicwKc4hzD8w",
+							"name": "estimated_hours",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "PeEuaTQW9X1eow/X",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "zHdRthsQdYGH2tme",
+					"name": "skill_lessons",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "/AnaGvtziNYoZk8O",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "VW2s3K+i9FvnnHPN",
+							"name": "module_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Zs/LV9iKgqt0Tg9o",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "9SA5E4WIQhU21AFG",
+							"name": "slug",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "uVrG423kwlFkFZLP",
+							"name": "content_html",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Bn/VlORUFXcj2k6P",
+							"name": "sort_order",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ASgTe3Afnnb2ORIS",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "D4qqJbD0Tqng2e/t",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "ht990HD5Yf7YFOWS",
+					"name": "skill_path_progress",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "yTHcGuWMi2UFZ2Bv",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "laoWNPm8Y7svUKHU",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "3d6SFZfdHZUGKfVi",
+							"name": "path_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "7kk7Dtfh3a8ftr6Z",
+							"name": "current_module_id",
+							"type": "INT",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "IhvkGjJe7aqTtmWv",
+							"name": "current_lesson_id",
+							"type": "INT",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "3kRV98eJK7l8s5M3",
+							"name": "progress_percent",
+							"type": "DECIMAL(5,2)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "9xAaIE3WoBrI/mZg",
+							"name": "started_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "j51VJLBNRBUn5+9/",
+							"name": "updated_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "iI8NIiQqfdjAtVKN",
+					"name": "placement_tests",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "E9t+ca9K7h9AGxiH",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "M/irS5NVXUMCs6LV",
+							"name": "path_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "CnXxFWLLwXj17oCs",
+							"name": "title",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "7E477SDe/xbYhiOE",
+							"name": "description",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "sdQ8w96f6Ae8O/XO",
+							"name": "is_active",
+							"type": "BOOLEAN",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "FY+r5zJzumQqM+VQ",
+					"name": "placement_questions",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "Q+1MiYmg4bFT+igw",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "SVHZuYo0hrFXV0Qz",
+							"name": "test_id",
+							"type": "INT",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "sL78I/TAfAJecBDu",
+							"name": "question_text",
+							"type": "TEXT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "CKc9xjJ7fM0WeXyY",
+							"name": "options",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "NEotLQ0PHoXIJbMt",
+							"name": "correct_answer",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AscSCpa6QiRqq8IN",
+							"name": "module_id",
+							"type": "INT",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "mqVlxfjRPV62z04l",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "ffdHyOubalLGW/R3",
+					"name": "placement_results",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "aISx8z0GwcEbBDWi",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "8tsI3etlfbBhedFd",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "CWbbnIgnJzq/TIAh",
+							"name": "test_id",
+							"type": "INT",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "0Z5P9HfSPgtborHc",
+							"name": "score",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "WhBzTNh15A3/cjz+",
+							"name": "recommended_start_module_id",
+							"type": "INT",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "/sck4snIyntPsQmx",
+							"name": "taken_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "7I660yn5r0p9nmRm",
+					"name": "practice_sessions",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "MKNEUuA7/9Yyy3Xa",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AkWRCFYfDz38fTKe",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "qZ4bep7/IE/6xfQ5",
+							"name": "grade_slug",
+							"type": "VARCHAR(100)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "qHF5R+ldPGfPcafQ",
+							"name": "subject_slug",
+							"type": "VARCHAR(100)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "1uxE2o3PA3l9nhf5",
+							"name": "chapter_id",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "vD4KyxsKqpdIwmLx",
+							"name": "difficulty",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "9y3QgxoORclON/Qn",
+							"name": "total_questions",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "LKG/rtWmTwPoJz53",
+							"name": "correct_count",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "rF1W1DuaBxpDEq7Y",
+							"name": "wrong_count",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "ljz6AddbwGulcRrh",
+							"name": "score",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "3L2OSiLbbbb/6wv5",
+							"name": "max_streak",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2RJI0KsU+7KwJ4ag",
+							"name": "duration_seconds",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Jkb7sWOWreDR9Ncm",
+							"name": "played_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "nCGr8WNcGikuW63W",
+					"name": "app_config",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "ilkn/7HcdlE2ae7p",
+							"name": "key",
+							"type": "VARCHAR(100)",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "k9i1qSOTukmxQL4a",
+							"name": "value",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "G2/QrtrXyzBhPNlA",
+							"name": "updated_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "YgP1nId6RiYOx79Q",
+					"name": "question_collections",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "RsfV7HNHPETPp7Jf",
+							"name": "id",
+							"type": "UUID",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "GFC4t9PhV0pQCaEJ",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "fmk2jQQVhh9R4Q59",
+							"name": "collection_name",
+							"type": "VARCHAR(255)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "XWijWbfTSQKn/j79",
+							"name": "grade_number",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Bzx3Hx84PaXrHrW3",
+							"name": "subject",
+							"type": "VARCHAR(50)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "1p+J+RnnY6Am4jYQ",
+							"name": "topic",
+							"type": "VARCHAR(255)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "1Y+n0B/NKb3tFE6K",
+							"name": "difficulty",
+							"type": "VARCHAR(20)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "mepwsIThwm/qY8vZ",
+							"name": "question_count",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "yAxiEEbwDka0c4jj",
+							"name": "duration_minutes",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "953oCrGMqli07ush",
+							"name": "is_test",
+							"type": "BOOLEAN",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "kX+QKOTAiMjeOKAs",
+							"name": "metadata",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "uWFENH0YzODWBIbk",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "dwDrSRIcfeYS5uJF",
+					"name": "generated_questions",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "n3ZVRVzbe9gFFn0X",
+							"name": "id",
+							"type": "UUID",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "6dGH21n4OeWhFCoi",
+							"name": "collection_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "O26DdiMf9qqpcSlr",
+							"name": "question_text",
+							"type": "TEXT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AB1jy3Nihq5WsOYE",
+							"name": "question_type",
+							"type": "VARCHAR(30)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "mPUUcG1W1Avd4XV+",
+							"name": "options",
+							"type": "JSONB",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "7J+C8PBNFwIraTaq",
+							"name": "correct_answer",
+							"type": "JSONB"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "TrF1K4GDihLkM8zK",
+							"name": "explanation",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "OzNf0ao9XmrsoFff",
+							"name": "image_svg",
+							"type": "TEXT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "adebFG77ONnj2EJm",
+							"name": "section",
+							"type": "VARCHAR(5)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "+0sZOGTto0KwAycN",
+							"name": "point_value",
+							"type": "DECIMAL(4,2)",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "iAPHEXFZr/6EHJ2A",
+							"name": "sort_order",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "JbQQMyUa/JwNGTLY",
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "Ah18yVxQBj+MTXyU",
+					"name": "generated_question_attempts",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "w5LA/nJ462YDDu8m",
+							"name": "id",
+							"type": "SERIAL",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "aFDU0R+kzIwZ0VrR",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "mao7PwLBA5zEotIs",
+							"name": "collection_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "2Z8tBzbQ2gZu7ZOb",
+							"name": "question_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "J5MM2cBh2Orp/yav",
+							"name": "user_answer",
+							"type": "JSONB"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "bFxOs0GvkC3Zt4+J",
+							"name": "is_correct",
+							"type": "BOOLEAN"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AvFXURPYskWp2KxF",
+							"name": "attempted_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDEntity",
+					"_id": "SuBg1xvkZbm91Q2L",
+					"name": "generated_session_results",
+					"columns": [
+						{
+							"_type": "ERDColumn",
+							"_id": "TbaprH3BsZpuDce3",
+							"name": "id",
+							"type": "UUID",
+							"primaryKey": true,
+							"unique": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "PdicZNUfS/auEC30",
+							"name": "user_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "JdkqsSNi3q/QherH",
+							"name": "collection_id",
+							"type": "UUID",
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "WEyOuGr25+96wCG9",
+							"name": "total_questions",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "yl75QmZki6WsyD9z",
+							"name": "correct_count",
+							"type": "INT"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "Bv8XXsmIYJU6CxpY",
+							"name": "score_percent",
+							"type": "DECIMAL(5,2)"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "NsfOf5K0OuhN4TYj",
+							"name": "time_spent_seconds",
+							"type": "INT",
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "uVhSTDLyz/QXmyak",
+							"name": "completed_at",
+							"type": "TIMESTAMP",
+							"nullable": true
+						}
+					]
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "GPdTxnlj02u7kZl1",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "XgaNwaVzKNhiJ/wT",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "I+0NzKz00/W71C15",
+						"reference": {
+							"$ref": "c9kPQ5TRvJ23b7FJ"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "KTblHuVzjmly39N+",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "JqqiwNzsxPVwLOBZ",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "WC37II0yx2lsPoOK",
+						"reference": {
+							"$ref": "5ISdj9T6eoDppxyb"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "Dr+/s8PZlWyiKNXu",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "qRx/GLEVbepBWIgP",
+						"reference": {
+							"$ref": "PyVlt0XOQxJtIQfq"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "11/wr+zLB/7ow59I",
+						"reference": {
+							"$ref": "mfj3V7IwSZ4G5j76"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "krwqgQx2xd9INtkf",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "UU8Cfffnkr69otch",
+						"reference": {
+							"$ref": "mfj3V7IwSZ4G5j76"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "Wx8iEjDsS7QeM8Vs",
+						"reference": {
+							"$ref": "ZR/p+bhM8e9eqwC3"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "3Np7R15BTMXOYMHu",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "JOsnnDyBGtMzEkMM",
+						"reference": {
+							"$ref": "oYY8zKXZBbh7dNeo"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "9HR9gAV0y08Ploe+",
+						"reference": {
+							"$ref": "ZR/p+bhM8e9eqwC3"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "hYVTZTsvB/9c/Qid",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "k2UPPxILghTJLThz",
+						"reference": {
+							"$ref": "ZR/p+bhM8e9eqwC3"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "d4GwqFasB3ohFzwS",
+						"reference": {
+							"$ref": "MXbgm/VtD73sy4al"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "KyMLn4poj8voB9TB",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "GB4yQV85UpeJnDe5",
+						"reference": {
+							"$ref": "MXbgm/VtD73sy4al"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "Oh95JwSRWQx2pMEm",
+						"reference": {
+							"$ref": "DCTVpEDBHEuprXba"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "ZTO6Jt//HBpWhrO/",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "QyrTgwjmxv4WfIhV",
+						"reference": {
+							"$ref": "DCTVpEDBHEuprXba"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "+oPFE54MWqnYdHKP",
+						"reference": {
+							"$ref": "15c78UkTkDgTPxjL"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "rtEyv76f5HSFMs39",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "7GYupXnN3yc9mHMY",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "F9AHJdodvfOw/KH0",
+						"reference": {
+							"$ref": "8oY4l5fEeD/6JrwR"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "smYGqBv2vipJ9WSu",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "cyfwWDmEPp4OIUQd",
+						"reference": {
+							"$ref": "DCTVpEDBHEuprXba"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "wiwNOw5h3+vNlmTo",
+						"reference": {
+							"$ref": "8oY4l5fEeD/6JrwR"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "nOLNXXXngOYLQZt4",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "Y+jglZWoeGwv1B9y",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "riDuTpgghFkww/Cx",
+						"reference": {
+							"$ref": "pcI1rpS8Cs7MWi7j"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "ZNMTYeSkXuvsYULk",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "rXt9EXMzoqDmPrCI",
+						"reference": {
+							"$ref": "15c78UkTkDgTPxjL"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "tvEFKklYTAe0oCwh",
+						"reference": {
+							"$ref": "pcI1rpS8Cs7MWi7j"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "gSEx0oG/qx1h8etB",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "0PzAA3NzqD5YuQ3H",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "oQBmS+s5gu5K8qm/",
+						"reference": {
+							"$ref": "CURd/+hTgRPafNua"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "AYOn7/fZTVKLV8Tb",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "7jmD5KWNl+3KXy8H",
+						"reference": {
+							"$ref": "MXbgm/VtD73sy4al"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "YUT8gXEZ+nZdswLD",
+						"reference": {
+							"$ref": "CURd/+hTgRPafNua"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "Q4u8+5jCe+HAJWoR",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "FygALTfxLy3uLC4m",
+						"reference": {
+							"$ref": "taZCoqX1vPe0sbmf"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "U3S7Lvyvsz6ZdAZ7",
+						"reference": {
+							"$ref": "PHcN0VI9bgAuNce1"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "oAyJMkaJW7dhDffn",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "m/ROh5jGpw3vRK6Q",
+						"reference": {
+							"$ref": "PHcN0VI9bgAuNce1"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "gft5edzttpQ4/BpF",
+						"reference": {
+							"$ref": "zHdRthsQdYGH2tme"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "hP6iXR2lrQ0f0na+",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "gXY4uOhVfipYMMn2",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "hWsSrYDfEHYyvSgR",
+						"reference": {
+							"$ref": "ht990HD5Yf7YFOWS"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "h7y9Z9fLDPYYhOrI",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "PE/FjwqxC/Fh9yuo",
+						"reference": {
+							"$ref": "taZCoqX1vPe0sbmf"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "yfBD/0Bw9ncr8fD5",
+						"reference": {
+							"$ref": "ht990HD5Yf7YFOWS"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "ysuB1EKeDmkU0TvY",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "6GVi+X4gstwAbmv0",
+						"reference": {
+							"$ref": "taZCoqX1vPe0sbmf"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "mMVqAljVgQb0cWnt",
+						"reference": {
+							"$ref": "iI8NIiQqfdjAtVKN"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "fxJQUyhCyPQAjCOF",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "yi4T+DBVKxgqmkud",
+						"reference": {
+							"$ref": "iI8NIiQqfdjAtVKN"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "Ae57LSkIie9cepZh",
+						"reference": {
+							"$ref": "FY+r5zJzumQqM+VQ"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "BSB+QBtNt029VUVG",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "98iU0iWd2N47jNPX",
+						"reference": {
+							"$ref": "PHcN0VI9bgAuNce1"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "LvUuOq59wScRnHDU",
+						"reference": {
+							"$ref": "FY+r5zJzumQqM+VQ"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "eQOeOXQk/1118SH1",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "3QrZ40ph/5K7Ew8U",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "hAtM+eMENazlS7Zn",
+						"reference": {
+							"$ref": "ffdHyOubalLGW/R3"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "ku11fksIasMUbTlr",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "7FIzu7eo0M/yVlwF",
+						"reference": {
+							"$ref": "iI8NIiQqfdjAtVKN"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "wXth4u+j6evIe4ph",
+						"reference": {
+							"$ref": "ffdHyOubalLGW/R3"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "YSPys4ECkAXyNser",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "CbL4uu9joBocztZJ",
+						"reference": {
+							"$ref": "PHcN0VI9bgAuNce1"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "YgYqMl6TuLYcTg5z",
+						"reference": {
+							"$ref": "ffdHyOubalLGW/R3"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "bH+qOXpoIDUNgrAA",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "oC1JwkYDh7qz0gbm",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "WiVx7L7hHS4PJqxu",
+						"reference": {
+							"$ref": "7I660yn5r0p9nmRm"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "TopzkoGamWhm/WRC",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "mM9pAHFhTX6s5wKx",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "b1k9k5wyYassVB5p",
+						"reference": {
+							"$ref": "YgP1nId6RiYOx79Q"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "yXbVQBVnxg8Sj/7A",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "lLf+y9Zq59wZmw5U",
+						"reference": {
+							"$ref": "YgP1nId6RiYOx79Q"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "luYiFi14IiuM8BaK",
+						"reference": {
+							"$ref": "dwDrSRIcfeYS5uJF"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "CT4uV/FoJIYGvRWY",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "ZdtcOTbkjL3SlPsC",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "5bj4HsRKSwgO4CPO",
+						"reference": {
+							"$ref": "Ah18yVxQBj+MTXyU"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "vHEz9PDrIlCpOAqM",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "KMA9MTszQPwGrd1O",
+						"reference": {
+							"$ref": "YgP1nId6RiYOx79Q"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "opZPz/pgUrCyLjlh",
+						"reference": {
+							"$ref": "Ah18yVxQBj+MTXyU"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "krXWiqVURmf7s/Qr",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "QqrbAnv6COHEwi4B",
+						"reference": {
+							"$ref": "dwDrSRIcfeYS5uJF"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "wGSyZAUJxIY6LfUS",
+						"reference": {
+							"$ref": "Ah18yVxQBj+MTXyU"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "k51zN6iZzDGXZD4m",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "ObK/pnBZqLnOn7Lz",
+						"reference": {
+							"$ref": "5BcwVv/ssR05ggBU"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "sMKXp15VJJCiSecI",
+						"reference": {
+							"$ref": "SuBg1xvkZbm91Q2L"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDRelationship",
+					"_id": "+tom7UXVP7UiqLJp",
+					"end1": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "gy4Nrb1Q796pJI1n",
+						"reference": {
+							"$ref": "YgP1nId6RiYOx79Q"
+						}
+					},
+					"end2": {
+						"_type": "ERDRelationshipEnd",
+						"_id": "Kbfx3wqJc4uXhc8i",
+						"reference": {
+							"$ref": "SuBg1xvkZbm91Q2L"
+						},
+						"cardinality": "*"
+					},
+					"identifying": false
+				},
+				{
+					"_type": "ERDDiagram",
+					"_id": "ffYdWhSNjagJPSvQ",
+					"name": "LearnHub ERD",
+					"defaultDiagram": true
+				}
+			]
+		}
+	]
+}
